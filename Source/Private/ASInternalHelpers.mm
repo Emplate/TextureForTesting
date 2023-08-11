@@ -61,6 +61,8 @@ void _ASInitializeSignpostObservers(void)
 }
 #endif  // AS_SIGNPOST_ENABLE
 
+// Changed with a fix from this comment:
+// https://github.com/TextureGroup/Texture/issues/2029#issuecomment-924766130
 void ASInitializeFrameworkMainThread(void)
 {
   static dispatch_once_t onceToken;
@@ -70,9 +72,8 @@ void ASInitializeFrameworkMainThread(void)
     if (ASActivateExperimentalFeature(ASExperimentalLayerDefaults)) {
       // Nop. We will gather default values on-demand in ASDefaultAllowsGroupOpacity and ASDefaultAllowsEdgeAntialiasing
     } else {
-      CALayer *layer = [[[UIView alloc] init] layer];
-      allowsGroupOpacityFromUIKitOrNil = @(layer.allowsGroupOpacity);
-      allowsEdgeAntialiasingFromUIKitOrNil = @(layer.allowsEdgeAntialiasing);
+      allowsGroupOpacityFromUIKitOrNil = @(YES); // Use default values here instead of loading the layer
+      allowsEdgeAntialiasingFromUIKitOrNil = @(NO);
     }
     ASNotifyInitialized();
 #if AS_SIGNPOST_ENABLE
